@@ -1,0 +1,11 @@
+-- This script goes into ServerScriptService or StarterPlayerScripts
+
+game.Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        -- Wait for the humanoid to be added
+        local humanoid = character:WaitForChild("Humanoid")
+        
+        -- Set the walk speed to 100
+        humanoid.WalkSpeed = 100
+    end)
+end)
