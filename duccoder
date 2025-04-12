@@ -1,11 +1,34 @@
--- This script goes into ServerScriptService or StarterPlayerScripts
+-- Auto Clicker LocalScript
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
-game.Players.PlayerAdded:Connect(function(player)
-    player.CharacterAdded:Connect(function(character)
-        -- Wait for the humanoid to be added
-        local humanoid = character:WaitForChild("Humanoid")
-        
-        -- Set the walk speed to 100
-        humanoid.WalkSpeed = 100
-    end)
+-- Settings
+local clickInterval = 0.1  -- Time in seconds between each click
+local isActive = true  -- Set to true to enable auto-clicking, false to disable
+
+-- Function to simulate mouse click
+local function simulateClick()
+    local mouse = game.Players.LocalPlayer:GetMouse()
+    local mousePos = mouse.Hit.p  -- Position where the click will occur
+
+    -- Create a click event
+    local clickEvent = Instance.new("RemoteEvent")
+    clickEvent.Name = "ClickEvent"
+    clickEvent.Parent = game.ReplicatedStorage
+    clickEvent:FireServer(mousePos)  -- Send the click event to the server
+end
+
+-- Function to auto-click at regular intervals
+local function autoClick()
+    while isActive do
+        simulateClick()
+        wait(clickInterval)
+    end
+end
+
+-- Start auto-clicking
+RunService.Heartbeat:Connect(function()
+    if isActive then
+        autoClick()
+    end
 end)
